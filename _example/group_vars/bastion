@@ -1,0 +1,10 @@
+system_users:
+  - name: jenkins
+    groups:
+    - "docker"
+    public_keys:
+    - "{{ playbook_dir }}/files/ssh-pubkeys/jenkins.pub"
+
+os_sudo_users_nopasswd: true
+os_sudo_users:
+  - jenkins

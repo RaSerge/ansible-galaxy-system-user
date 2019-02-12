@@ -1,0 +1,23 @@
+---
+ansible_python_interpreter: /usr/bin/python3
+
+system_groups:
+- dev
+- ops
+- ci
+
+os_sudo_users: []
+
+system_users_global:
+  - name: odmin1
+    groups:
+    - "dev"
+    - "ops"
+    - "docker"
+    public_keys:
+    - "{{ playbook_dir }}/files/ssh-pubkeys/odmin1.pub"
+  - name: jenkins
+    groups:
+    - "ci"
+    public_keys:
+    - "{{ playbook_dir }}/files/ssh-pubkeys/jenkins.pub"

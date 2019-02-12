@@ -1,0 +1,39 @@
+---
+- name: add system groups
+  group:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ system_groups }}"
+  when: system_groups is defined
+
+- name: add system users
+  user: name={{ item.name }}
+        state=present
+        groups={{ item.groups }}
+        append=yes
+        shell=/bin/bash
+  with_items:
+  - "{{ system_users }}"
+  - "{{ system_users_global }}"
+
+- authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ lookup('file', item.1) }}"
+  with_subelements:
+     - "{{ system_users_global }}"
+     - public_keys
+
+- authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ lookup('file', item.1) }}"
+  with_subelements:
+     - "{{ system_users }}"
+     - public_keys
+
+- name: Create sudoers file
+  template:
+    src: "os-sudo-group.j2"
+    dest: "/etc/sudoers.d/os-sudoers"
+    mode: 600
+    owner: "root"
+    group: "root"

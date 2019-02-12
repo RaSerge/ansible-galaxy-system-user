@@ -1,0 +1,26 @@
+{%- if os_sudo_users|length >= 1 -%}
+User_Alias OS_USERS = {{os_sudo_users|default([])|join(', ')}}
+{%- endif %}
+
+
+{%- if os_sudo_users|length >= 1 -%}
+
+{% if os_sudo_users_nopasswd %}
+
+OS_USERS ALL=(ALL) NOPASSWD:ALL
+
+{% for sudo_user in os_sudo_users %}
+
+%dev ALL=( {{sudo_user}}:{{sudo_user}}) NOPASSWD: ALL
+
+{% endfor %}
+
+{%- else -%}
+
+OS_USERS ALL=(ALL) ALL
+
+{%- endif -%}
+
+{%- endif -%}
+
+%ops ALL=(ALL) NOPASSWD:ALL

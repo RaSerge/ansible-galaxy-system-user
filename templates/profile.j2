@@ -1,0 +1,8 @@
+#
+#
+#
+{% if item.profile_vars -%}
+{% for key, value in item.profile_vars.iteritems() %}
+export {{ key }}={{ value }}
+{% endfor %}
+{%- endif %}
